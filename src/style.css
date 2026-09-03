@@ -352,75 +352,158 @@ body {
   100% { transform: translateY(-3px); }
 }
 
-/* 4-BEAT DIGITIGRADE WALKING GAIT & PRIMORDIAL POUCH SWAY */
-.leg-step-l, .leg-fore-l {
-  transform-origin: 154px 122px;
-  animation: gaitForeL 0.65s ease-in-out infinite alternate;
-}
+/* ============================================================
+   5-SECTION ARTICULATED KINEMATICS & 4-BEAT LATERAL WALK
+   Order: Left Hind (0s) -> Left Fore (0.2s) -> Right Hind (0.4s) -> Right Fore (0.6s)
+   ============================================================ */
 
-.leg-step-r, .leg-fore-r {
-  transform-origin: 166px 118px;
-  animation: gaitForeR 0.65s ease-in-out infinite alternate;
-}
-
-.leg-hind-l {
+/* 1. LEFT HIND (Rear Far Leg: Starts at 0.0s) */
+.limb-hind-l {
   transform-origin: 64px 120px;
-  animation: gaitHindL 0.65s ease-in-out infinite alternate;
+  animation: rearThighSwing 0.8s ease-in-out infinite;
+  animation-delay: 0s;
+}
+.joint-knee-l {
+  transform-origin: 52px 142px;
+  animation: kneeFlexGait 0.8s ease-in-out infinite;
+  animation-delay: 0s;
+}
+.joint-hock-l {
+  transform-origin: 42px 165px;
+  animation: hockSpringGait 0.8s ease-in-out infinite;
+  animation-delay: 0s;
 }
 
-.leg-hind-r {
+/* 2. LEFT FORE (Front Far Leg: Starts at 0.2s - 25% phase) */
+.limb-fore-l {
+  transform-origin: 154px 120px;
+  animation: foreScapulaReach 0.8s ease-in-out infinite;
+  animation-delay: -0.6s;
+}
+.joint-elbow-l {
+  transform-origin: 146px 146px;
+  animation: elbowFlexGait 0.8s ease-in-out infinite;
+  animation-delay: -0.6s;
+}
+.joint-wrist-l {
+  transform-origin: 140px 166px;
+  animation: carpusAbsorbGait 0.8s ease-in-out infinite;
+  animation-delay: -0.6s;
+}
+
+/* 3. RIGHT HIND (Rear Near Leg: Starts at 0.4s - 50% phase) */
+.limb-hind-r {
   transform-origin: 72px 118px;
-  animation: gaitHindR 0.65s ease-in-out infinite alternate;
+  animation: rearThighSwing 0.8s ease-in-out infinite;
+  animation-delay: -0.4s;
+}
+.joint-knee-r {
+  transform-origin: 80px 144px;
+  animation: kneeFlexGait 0.8s ease-in-out infinite;
+  animation-delay: -0.4s;
+}
+.joint-hock-r {
+  transform-origin: 88px 166px;
+  animation: hockSpringGait 0.8s ease-in-out infinite;
+  animation-delay: -0.4s;
 }
 
-@keyframes gaitForeL {
-  0% { transform: rotate(-16deg); }
-  100% { transform: rotate(14deg); }
+/* 4. RIGHT FORE (Front Near Leg: Starts at 0.6s - 75% phase) */
+.limb-fore-r {
+  transform-origin: 166px 116px;
+  animation: foreScapulaReach 0.8s ease-in-out infinite;
+  animation-delay: -0.2s;
+}
+.joint-elbow-r {
+  transform-origin: 176px 144px;
+  animation: elbowFlexGait 0.8s ease-in-out infinite;
+  animation-delay: -0.2s;
+}
+.joint-wrist-r {
+  transform-origin: 186px 166px;
+  animation: carpusAbsorbGait 0.8s ease-in-out infinite;
+  animation-delay: -0.2s;
 }
 
-@keyframes gaitForeR {
-  0% { transform: rotate(14deg); }
-  100% { transform: rotate(-16deg); }
+/* ================= KEYFRAME KINEMATICS ================= */
+
+/* Section 1 & 2: Rear Thigh (Femur) Pendulum Swing */
+@keyframes rearThighSwing {
+  0%   { transform: rotate(-15deg); } /* Drive back */
+  35%  { transform: rotate(8deg); }  /* Swing forward */
+  70%  { transform: rotate(18deg); }  /* Maximum reach */
+  100% { transform: rotate(-15deg); } /* Foot strike & push */
 }
 
-@keyframes gaitHindL {
-  0% { transform: rotate(16deg); }
-  100% { transform: rotate(-14deg); }
+/* Section 3: Knee / Stifle Joint Flexion */
+@keyframes kneeFlexGait {
+  0%   { transform: rotate(0deg); }   /* Extended */
+  35%  { transform: rotate(16deg); }  /* Flex to clear floor */
+  70%  { transform: rotate(-5deg); }  /* Open for touchdown */
+  100% { transform: rotate(0deg); }   /* Weight bearing */
 }
 
-@keyframes gaitHindR {
-  0% { transform: rotate(-14deg); }
-  100% { transform: rotate(16deg); }
+/* Section 4 & 5: Hock Ankle Spring & Digitigrade Paw */
+@keyframes hockSpringGait {
+  0%   { transform: rotate(12deg); }  /* Push-off thrust */
+  35%  { transform: rotate(-10deg); } /* Toe lift */
+  70%  { transform: rotate(6deg); }   /* Prepare to land */
+  100% { transform: rotate(12deg); }  /* Z-spring compression */
+}
+
+/* Section 1 & 2: Front Scapula / Shoulder Reach */
+@keyframes foreScapulaReach {
+  0%   { transform: rotate(16deg); }  /* Touchdown & support */
+  40%  { transform: rotate(-18deg); } /* Push backward */
+  75%  { transform: rotate(12deg); }  /* Forward reach */
+  100% { transform: rotate(16deg); }  /* Plant */
+}
+
+/* Section 3: Elbow Hinge Joint */
+@keyframes elbowFlexGait {
+  0%   { transform: rotate(0deg); }   /* Straight support */
+  40%  { transform: rotate(-15deg); } /* Push back */
+  70%  { transform: rotate(14deg); }  /* Lift paw */
+  100% { transform: rotate(0deg); }   /* Extend */
+}
+
+/* Section 4 & 5: Carpal Wrist Shock Absorber */
+@keyframes carpusAbsorbGait {
+  0%   { transform: rotate(-6deg); }  /* Spring compression */
+  40%  { transform: rotate(12deg); }  /* Flick off floor */
+  75%  { transform: rotate(-8deg); }  /* Flex down to land */
+  100% { transform: rotate(-6deg); }  /* Dampen impact */
 }
 
 /* Primordial Pouch Swaying */
 .cat-primordial-pouch {
   transform-origin: 108px 148px;
-  animation: pouchSway 0.65s ease-in-out infinite alternate;
+  animation: pouchSway 0.8s ease-in-out infinite alternate;
 }
 
 @keyframes pouchSway {
-  0% { transform: translateY(0) scaleY(1); }
-  100% { transform: translateY(1.8px) scaleY(1.08); }
+  0%   { transform: translateY(0) scaleY(1); }
+  50%  { transform: translateY(2px) scaleY(1.08); }
+  100% { transform: translateY(0) scaleY(1); }
 }
 
 /* Feline Spine Walking Dip */
 .cat-torso-walk {
   transform-origin: 110px 130px;
-  animation: spineWalkDip 0.65s ease-in-out infinite alternate;
+  animation: spineWalkDip 0.4s ease-in-out infinite alternate;
 }
 
 @keyframes spineWalkDip {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(1.2px); }
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(1.5px); }
 }
 
 .cat-walk-shadow {
-  animation: walkShadowPulse 0.65s ease-in-out infinite alternate;
+  animation: walkShadowPulse 0.4s ease-in-out infinite alternate;
 }
 
 @keyframes walkShadowPulse {
-  0% { transform: scaleX(0.96); opacity: 0.28; }
+  0%   { transform: scaleX(0.96); opacity: 0.28; }
   100% { transform: scaleX(1.04); opacity: 0.35; }
 }
 

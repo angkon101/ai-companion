@@ -328,66 +328,100 @@ function renderCalicoWalking() {
       <!-- FELINE WALKING SKELETAL RIG -->
       <g class="calico-walk-skeleton">
         
-        <!-- ================= REAR LIMBS (40% Weight, Propulsive Launchers) ================= -->
-        <!-- Rear Far Leg (Left Hind: Hock Joint & Metatarsals driving backward) -->
-        <g class="leg-hind-l">
-          <!-- Femur & Stifle (Knee) -->
-          <path d="M 64 120 L 52 142 L 42 165 L 38 182" stroke="#1e293b" stroke-width="12" stroke-linecap="round" fill="none" />
-          <!-- Hock Joint Knuckle -->
-          <circle cx="42" cy="165" r="5" fill="#1e293b" />
-          <!-- Digitigrade Paw & White Sock -->
-          <ellipse cx="37" cy="184" rx="7.5" ry="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+        <!-- ================= REAR FAR LIMB (Left Hind: 5-Section Biomechanics) ================= -->
+        <g class="limb-hind-l">
+          <!-- Section 1 & 2: Pelvis & Femur (Thigh) -->
+          <g class="joint-hip-l">
+            <path d="M 64 120 L 52 142" stroke="#1e293b" stroke-width="14" stroke-linecap="round" fill="none" />
+            <!-- Stifle (True Knee) Joint -->
+            <circle cx="52" cy="142" r="5.5" fill="#1e293b" />
+            <!-- Section 3: Tibia/Fibula (Crus/Shank) -->
+            <g class="joint-knee-l">
+              <path d="M 52 142 L 42 165" stroke="#1e293b" stroke-width="12" stroke-linecap="round" fill="none" />
+              <!-- Section 4: HOCK Joint (The Elevated Ankle / Calcaneus) -->
+              <g class="joint-hock-l">
+                <circle cx="42" cy="165" r="5" fill="#1e293b" />
+                <!-- Section 4 & 5: Metatarsus & Phalanges (Toe Digits & White Sock) -->
+                <path d="M 42 165 L 38 182" stroke="#1e293b" stroke-width="10" stroke-linecap="round" fill="none" />
+                <ellipse cx="37" cy="184" rx="7.5" ry="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+              </g>
+            </g>
+          </g>
         </g>
 
-        <!-- ================= FRONT LIMBS (60% Weight, Directional Steerers) ================= -->
-        <!-- Front Far Leg (Left Fore: Scapula, Humerus, Carpus pushing back) -->
-        <g class="leg-fore-l">
-          <path d="M 154 122 L 146 148 L 140 168 L 136 182" stroke="#ffffff" stroke-width="13" stroke-linecap="round" fill="none" />
-          <!-- Carpal Joint -->
-          <circle cx="140" cy="168" r="4.5" fill="#e2e8f0" />
-          <!-- Digitigrade Forepaw with Pink Toe Beans -->
-          <ellipse cx="135" cy="184" rx="8" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+        <!-- ================= FRONT FAR LIMB (Left Fore: 5-Section Biomechanics) ================= -->
+        <g class="limb-fore-l">
+          <!-- Section 1 & 2: Scapula & Humerus (Upper Arm) -->
+          <g class="joint-shoulder-l">
+            <path d="M 154 120 L 146 146" stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none" />
+            <!-- Elbow Joint -->
+            <circle cx="146" cy="146" r="5" fill="#e2e8f0" />
+            <!-- Section 3: Radius & Ulna (Forearm) -->
+            <g class="joint-elbow-l">
+              <path d="M 146 146 L 140 166" stroke="#ffffff" stroke-width="12" stroke-linecap="round" fill="none" />
+              <!-- Section 4: Carpus (Wrist Joint & Pastern) -->
+              <g class="joint-wrist-l">
+                <circle cx="140" cy="166" r="4.5" fill="#e2e8f0" />
+                <!-- Section 5: Digitigrade Forepaw with Pink Toe Beans -->
+                <path d="M 140 166 L 136 182" stroke="#ffffff" stroke-width="10" stroke-linecap="round" fill="none" />
+                <ellipse cx="135" cy="184" rx="8" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+              </g>
+            </g>
+          </g>
         </g>
 
         <!-- ================= TORSO & PRIMORDIAL POUCH ================= -->
-        <!-- Flexible Spine & Muscular Ribcage -->
         <g class="cat-torso-walk">
-          <!-- Main White Torso Base -->
           <path d="M 56 114 C 74 102 144 102 170 114 C 176 136 162 152 134 148 C 98 148 64 144 54 125 Z" fill="#ffffff" />
-          
-          <!-- Primordial Pouch: Loose lower belly fold that sways with stride -->
           <path d="M 76 142 C 95 154 122 153 140 144 C 125 156 90 158 76 142 Z" fill="#f1f5f9" class="cat-primordial-pouch" />
-
-          <!-- Calico Flank Patches -->
-          <!-- Inky Black Saddle Patch over spine and left flank -->
           <path d="M 72 108 C 88 104 104 114 98 136 C 82 138 68 128 72 108 Z" fill="#1e293b" />
-          <!-- Warm Ginger Orange Patch over right ribs -->
           <path d="M 126 106 C 145 106 156 118 152 140 C 135 142 122 128 126 106 Z" fill="#ea580c" />
         </g>
 
-        <!-- ================= NEAR LIMBS (Foreground) ================= -->
-        <!-- Rear Near Leg (Right Hind: Muscular Thigh, Elevated Hock & Metatarsus stepping forward) -->
-        <g class="leg-hind-r">
-          <!-- Muscular Thigh & Stifle -->
-          <path d="M 72 118 C 82 132 80 152 86 168 L 94 182" stroke="#ea580c" stroke-width="14" stroke-linecap="round" fill="none" />
-          <!-- Elevated Hock Joint -->
-          <circle cx="86" cy="168" r="6" fill="#ea580c" />
-          <!-- White Sock Paw with Knuckle Creases -->
-          <ellipse cx="95" cy="184" rx="8.5" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
-          <line x1="93" y1="182" x2="93" y2="186" stroke="#94a3b8" stroke-width="0.8" />
-          <line x1="97" y1="182" x2="97" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+        <!-- ================= REAR NEAR LIMB (Right Hind: 5-Section Biomechanics) ================= -->
+        <g class="limb-hind-r">
+          <!-- Section 1 & 2: Pelvis & Muscular Ginger Femur -->
+          <g class="joint-hip-r">
+            <path d="M 72 118 L 80 144" stroke="#ea580c" stroke-width="15" stroke-linecap="round" fill="none" />
+            <!-- Stifle (Knee) Joint -->
+            <circle cx="80" cy="144" r="6" fill="#ea580c" />
+            <!-- Section 3: Tibia/Fibula (Shank) -->
+            <g class="joint-knee-r">
+              <path d="M 80 144 L 88 166" stroke="#ea580c" stroke-width="13" stroke-linecap="round" fill="none" />
+              <!-- Section 4: HOCK Joint (Backward Ankle Spring) -->
+              <g class="joint-hock-r">
+                <circle cx="88" cy="166" r="5.5" fill="#ea580c" />
+                <!-- Section 5: Metatarsus & White Sock Paw with Knuckle Creases -->
+                <path d="M 88 166 L 94 182" stroke="#ea580c" stroke-width="11" stroke-linecap="round" fill="none" />
+                <ellipse cx="95" cy="184" rx="8.5" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+                <line x1="93" y1="182" x2="93" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+                <line x1="97" y1="182" x2="97" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+              </g>
+            </g>
+          </g>
         </g>
 
-        <!-- Front Near Leg (Right Fore: Free-floating Scapula, Humerus & Carpal Extension) -->
-        <g class="leg-fore-r">
-          <!-- Scapular Muscle Ridge & Humerus -->
-          <path d="M 166 118 L 178 148 L 186 168 L 194 182" stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none" />
-          <!-- Carpal (Wrist) Joint -->
-          <circle cx="186" cy="168" r="5" fill="#e2e8f0" />
-          <!-- White Forepaw touching down -->
-          <ellipse cx="196" cy="184" rx="8.5" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
-          <line x1="194" y1="182" x2="194" y2="186" stroke="#94a3b8" stroke-width="0.8" />
-          <line x1="198" y1="182" x2="198" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+        <!-- ================= FRONT NEAR LIMB (Right Fore: 5-Section Biomechanics) ================= -->
+        <g class="limb-fore-r">
+          <!-- Section 1 & 2: Free-Floating Scapula & Humerus -->
+          <g class="joint-shoulder-r">
+            <path d="M 166 116 L 176 144" stroke="#ffffff" stroke-width="15" stroke-linecap="round" fill="none" />
+            <!-- Elbow Joint -->
+            <circle cx="176" cy="144" r="5.5" fill="#e2e8f0" />
+            <!-- Section 3: Radius/Ulna (Forearm) -->
+            <g class="joint-elbow-r">
+              <path d="M 176 144 L 186 166" stroke="#ffffff" stroke-width="13" stroke-linecap="round" fill="none" />
+              <!-- Section 4: Carpal Wrist Joint -->
+              <g class="joint-wrist-r">
+                <circle cx="186" cy="166" r="5" fill="#e2e8f0" />
+                <!-- Section 5: Digitigrade Forepaw Touching Down -->
+                <path d="M 186 166 L 194 182" stroke="#ffffff" stroke-width="11" stroke-linecap="round" fill="none" />
+                <ellipse cx="196" cy="184" rx="8.5" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+                <line x1="194" y1="182" x2="194" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+                <line x1="198" y1="182" x2="198" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+              </g>
+            </g>
+          </g>
         </g>
 
         <!-- ================= CRANIAL HEAD (Stabilized & Alert) ================= -->
