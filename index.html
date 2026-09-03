@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antigravity AI Companion - Your Coding Buddy</title>
-  <meta name="description" content="An interactive AI companion widget for Antigravity IDE featuring animated avatars, reactive moods, sound effects, and floating desktop Picture-in-Picture mode.">
+  <title>AI Online Pet Cat</title>
+  <meta name="description" content="A simple, lifelike AI Online Pet Cat. Roams around, cleans itself, and playfully swats at your cursor with its paws!">
   <link rel="stylesheet" href="/src/style.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
 </head>
 <body>
 
   <!-- Native Desktop App Title Bar (Electron only) -->
   <div id="desktop-titlebar" class="desktop-titlebar">
     <div class="titlebar-drag-region">
-      <span class="titlebar-icon">⚡</span>
-      <span class="titlebar-title">Antigravity Buddy</span>
+      <span class="titlebar-icon">🐾</span>
+      <span class="titlebar-title">PET CAT // DESKTOP BUDDY</span>
     </div>
     <div class="titlebar-controls">
       <button id="btn-win-pin" class="win-btn active" title="Toggle Always-on-Top Pin" aria-label="Pin Always on Top">📌</button>
@@ -24,147 +24,65 @@
   </div>
 
   <div id="app">
-    <!-- Top Nav Header -->
+    <!-- Clean Minimalist Header -->
     <header class="app-header">
       <div class="brand-info">
-        <div class="brand-icon">⚡</div>
-        <h1 class="brand-title">Antigravity Buddy</h1>
+        <span class="brand-emoji">🐾</span>
+        <span class="brand-title">Cat Pet</span>
+      </div>
+
+      <!-- Quick Breed Selector -->
+      <div class="breed-pills">
+        <button class="breed-pill active" data-breed="calico" title="Calico (Anatomical Feline)">Calico</button>
+        <button class="breed-pill" data-breed="tabby" title="Orange Tabby">Tabby</button>
+        <button class="breed-pill" data-breed="void" title="Midnight Void">Black</button>
+        <button class="breed-pill" data-breed="siamese" title="Siamese">Siamese</button>
       </div>
       
       <div class="header-actions">
         <!-- Audio Mute Toggle -->
-        <button id="btn-sound-toggle" class="icon-btn active" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
+        <button id="btn-sound-toggle" class="icon-btn active" title="Toggle Purrs & Meows" aria-label="Toggle Sound Effects">
           🔊
-        </button>
-        <!-- Voice TTS Toggle -->
-        <button id="btn-voice-toggle" class="icon-btn" title="Toggle Voice Speech" aria-label="Toggle Voice Speech">
-          🗣️
         </button>
         <!-- Picture-in-Picture / Float Over IDE -->
         <button id="btn-pip-toggle" class="pip-float-btn" title="Float over Antigravity IDE (Picture-in-Picture)">
-          <span>🪟</span> Float over IDE
+          <span>🪟</span> Float
         </button>
       </div>
     </header>
 
-    <!-- Slot for Main Companion (can be reparented into PiP window) -->
+    <!-- Main Pet Terrarium / Living Room -->
     <div id="companion-dock-slot">
-      <main id="companion-main-card" class="companion-card">
+      <main id="pet-room-card" class="pet-room-card">
         
-        <!-- Interactive Speech Bubble -->
-        <div class="speech-bubble-container">
-          <div id="companion-speech-bubble" class="speech-bubble bubble-visible">
-            Hey! Ready to write clean code together in Antigravity? 🚀
+        <!-- Hint label -->
+        <div class="pet-hint-bar">
+          <span class="hint-text">Move cursor near the cat to play! Click to pet.</span>
+        </div>
+
+        <!-- Roaming Floor Stage -->
+        <div id="pet-stage" class="pet-stage">
+          <!-- The Autonomous Living Cat -->
+          <div id="pet-cat-actor" class="pet-cat-actor" title="Click to pet me!">
+            <!-- Injected via PetBrain / renderPetCat -->
           </div>
         </div>
 
-        <!-- Animated Avatar Canvas / Stage -->
-        <div id="companion-avatar-stage" class="avatar-stage" title="Click to pet me!">
-          <!-- Injected via AvatarRenderer -->
-        </div>
-
-        <!-- Status & Stats Bar -->
-        <div class="status-bar">
-          <div class="mood-badge">
-            <span id="mood-dot-indicator" class="mood-dot"></span>
-            <span id="mood-text-label">Vibing / Idle</span>
-          </div>
-          
-          <div class="stats-group">
-            <div class="stat-item" title="Energy level (feed coffee to recharge)">
-              <span>⚡</span>
-              <span id="stat-energy" class="stat-val">100%</span>
-            </div>
-            <div class="stat-item" title="Companion Affinity / Friendship">
-              <span>💖</span>
-              <span id="stat-affinity" class="stat-val">Lv.1</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Interaction Actions -->
-        <section class="quick-actions" aria-label="Quick Actions">
-          <button id="btn-action-pet" class="action-btn" title="Pet Companion">
-            <span class="btn-icon">❤️</span>
-            <span>Pet</span>
+        <!-- Subtle Activity Bar -->
+        <footer class="pet-actions-bar">
+          <button id="btn-pet-groom" class="pet-action-chip" title="Watch cat clean itself">
+            <span>👅</span> Clean Paw
           </button>
-          <button id="btn-action-coffee" class="action-btn" title="Feed Coffee">
-            <span class="btn-icon">☕</span>
-            <span>Coffee</span>
+          <button id="btn-pet-roam" class="pet-action-chip" title="Tell cat to explore">
+            <span>🐾</span> Roam Around
           </button>
-          <button id="btn-action-talk" class="action-btn" title="Get Coding Advice">
-            <span class="btn-icon">💬</span>
-            <span>Advice</span>
+          <button id="btn-pet-treat" class="pet-action-chip" title="Feed a fish treat">
+            <span>🐟</span> Treat
           </button>
-          <button id="btn-action-debug" class="action-btn" title="Toggle Bug Hunt Mode">
-            <span class="btn-icon">🔍</span>
-            <span>Debug</span>
-          </button>
-          <button id="btn-action-celebrate" class="action-btn" title="Trigger Eureka Celebration!">
-            <span class="btn-icon">🎉</span>
-            <span>Eureka!</span>
-          </button>
-        </section>
+        </footer>
 
       </main>
     </div>
-
-    <!-- Pomodoro Focus Sprint Panel -->
-    <section class="focus-panel" aria-label="Focus Timer">
-      <div class="panel-title-bar">
-        <h2 class="panel-title">
-          <span>⏱️</span> Coding Sprint
-        </h2>
-        <div class="timer-sprint-tags">
-          <button class="tag-btn active" data-minutes="25">25m</button>
-          <button class="tag-btn" data-minutes="15">15m</button>
-          <button class="tag-btn" data-minutes="5">5m</button>
-        </div>
-      </div>
-
-      <div class="timer-display-wrap">
-        <div id="timer-display" class="timer-digits">25:00</div>
-        <div class="timer-controls">
-          <button id="btn-timer-toggle" class="timer-btn-primary">Start Sprint</button>
-          <button id="btn-timer-reset" class="icon-btn" title="Reset Timer">🔄</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Avatar Customizer & Switcher Panel -->
-    <section class="customizer-panel" aria-label="Avatar Customization">
-      <div class="panel-title-bar">
-        <h2 class="panel-title">
-          <span>🎨</span> Companion Persona
-        </h2>
-      </div>
-
-      <div class="avatar-selector-grid">
-        <button class="avatar-pill active" data-avatar="cyberbot">
-          <span class="avatar-pill-icon">🤖</span>
-          <span>Byte Bot</span>
-        </button>
-        <button class="avatar-pill" data-avatar="kitsune">
-          <span class="avatar-pill-icon">🦊</span>
-          <span>Kitsune</span>
-        </button>
-        <button class="avatar-pill" data-avatar="slime">
-          <span class="avatar-pill-icon">🫧</span>
-          <span>Slime</span>
-        </button>
-      </div>
-
-      <div class="color-swatch-row">
-        <span class="swatch-label">Glow Theme</span>
-        <div class="color-dots">
-          <button class="color-dot active" style="background: #00f2fe; color: #00f2fe;" data-primary="#00f2fe" data-accent="#7928ca" title="Cyber Cyan"></button>
-          <button class="color-dot" style="background: #ff2a85; color: #ff2a85;" data-primary="#ff2a85" data-accent="#ffb703" title="Neon Magenta"></button>
-          <button class="color-dot" style="background: #06d6a0; color: #06d6a0;" data-primary="#06d6a0" data-accent="#00f2fe" title="Matrix Emerald"></button>
-          <button class="color-dot" style="background: #ffd166; color: #ffd166;" data-primary="#ffd166" data-accent="#ff7b54" title="Solar Amber"></button>
-        </div>
-      </div>
-    </section>
-
   </div>
 
   <script type="module" src="/src/main.js"></script>

@@ -1,13 +1,15 @@
 /**
- * Procedural Web Audio API Sound Synthesizer
- * Zero external audio files required, low-latency, works offline!
+ * Realistic Feline Web Audio Synthesizer
+ * Procedural Cat Meows, Purrs, Trills, Treat Crunches, and Pounce Boops
  */
 
 class SoundFX {
   constructor() {
     this.ctx = null;
     this.muted = false;
-    this.volume = 0.4;
+    this.volume = 0.5;
+    this.purrSource = null;
+    this.purrGain = null;
   }
 
   init() {
@@ -24,10 +26,16 @@ class SoundFX {
 
   setMuted(muted) {
     this.muted = muted;
+    if (muted && this.purrGain) {
+      this.stopPurr();
+    }
   }
 
   toggleMute() {
     this.muted = !this.muted;
+    if (this.muted) {
+      this.stopPurr();
+    }
     return this.muted;
   }
 
@@ -35,8 +43,142 @@ class SoundFX {
     this.volume = Math.max(0, Math.min(1, val));
   }
 
-  // Gentle cute pet chirp / boop
-  playBoop(pitchMult = 1.0) {
+  // Realistic Kitten/Cat Meow using formant filtering
+  playMeow(pitch = 1.0) {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = 'sawtooth';
+
+    // Feline meow pitch contour: starts mid, rises, then dips softly (e.g. 520Hz -> 820Hz -> 480Hz)
+    const baseFreq = 540 * pitch;
+    osc.frequency.setValueAtTime(baseFreq * 0.9, t);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.35, t + 0.16);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.85, t + 0.45);
+
+    // Formant vocal filter for nasal "m-e-o-w" formant
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1100, t);
+    filter.frequency.linearRampToValueAtTime(1900, t + 0.16);
+    filter.frequency.linearRampToValueAtTime(950, t + 0.45);
+    filter.Q.setValueAtTime(3.5, t);
+
+    gain.gain.setValueAtTime(0.01, t);
+    gain.gain.linearRampToValueAtTime(this.volume * 0.45, t + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.48);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(t);
+    osc.stop(t + 0.5);
+  }
+
+  // Cute Cat Greeting Trill (mrr-ow chirp)
+  playTrill() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    for (let i = 0; i < 3; i++) {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = t + i * 0.055;
+
+      osc.type = 'sine';
+      const f = 680 + i * 110;
+      osc.frequency.setValueAtTime(f, start);
+      osc.frequency.linearRampToValueAtTime(f * 1.15, start + 0.05);
+
+      gain.gain.setValueAtTime(this.volume * 0.35, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.06);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(start);
+      osc.stop(start + 0.06);
+    }
+  }
+
+  // Realistic Purr (deep soothing ~25Hz motor vibration with resonance)
+  playPurr(duration = 2.5) {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    const carrier = this.ctx.createOscillator();
+    const modulator = this.ctx.createOscillator();
+    const modGain = this.ctx.createGain();
+    const mainGain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    carrier.type = 'sawtooth';
+    carrier.frequency.setValueAtTime(80, t); // deep chest purr
+
+    // 24Hz laryngeal motor modulation
+    modulator.type = 'sine';
+    modulator.frequency.setValueAtTime(24, t);
+
+    modGain.gain.setValueAtTime(30, t);
+    modulator.connect(carrier.frequency);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(160, t);
+
+    mainGain.gain.setValueAtTime(0.01, t);
+    mainGain.gain.linearRampToValueAtTime(this.volume * 0.4, t + 0.3);
+    mainGain.gain.setValueAtTime(this.volume * 0.4, t + duration - 0.3);
+    mainGain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+    carrier.connect(filter);
+    filter.connect(mainGain);
+    mainGain.connect(this.ctx.destination);
+
+    modulator.start(t);
+    carrier.start(t);
+    modulator.stop(t + duration);
+    carrier.stop(t + duration);
+  }
+
+  // Crunchy treat / snack eating sound
+  playCrunch() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    for (let i = 0; i < 4; i++) {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = t + i * 0.08;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(900 + Math.random() * 400, start);
+      osc.frequency.exponentialRampToValueAtTime(200, start + 0.04);
+
+      gain.gain.setValueAtTime(this.volume * 0.35, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.05);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(start);
+      osc.stop(start + 0.05);
+    }
+  }
+
+  // Playful pounce / jump boop
+  playPounce() {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
@@ -46,151 +188,20 @@ class SoundFX {
     const gain = this.ctx.createGain();
 
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(520 * pitchMult, t);
-    osc.frequency.exponentialRampToValueAtTime(880 * pitchMult, t + 0.12);
+    osc.frequency.setValueAtTime(280, t);
+    osc.frequency.exponentialRampToValueAtTime(750, t + 0.14);
 
-    gain.gain.setValueAtTime(this.volume * 0.5, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start(t);
-    osc.stop(t + 0.15);
-  }
-
-  // Double cute chirp for pet interactions
-  playHappyPurr() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-
-    const t = this.ctx.currentTime;
-    [0, 0.09, 0.18].forEach((delay, idx) => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'triangle';
-      const f = 660 + idx * 140;
-      osc.frequency.setValueAtTime(f, t + delay);
-      osc.frequency.exponentialRampToValueAtTime(f * 1.3, t + delay + 0.08);
-
-      gain.gain.setValueAtTime(this.volume * 0.4, t + delay);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.09);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(t + delay);
-      osc.stop(t + delay + 0.09);
-    });
-  }
-
-  // Celebratory fanfare chord when code is finished or Eureka triggered
-  playSuccess() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-
-    const t = this.ctx.currentTime;
-    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-    notes.forEach((freq, i) => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, t + i * 0.08);
-
-      gain.gain.setValueAtTime(0.01, t + i * 0.08);
-      gain.gain.linearRampToValueAtTime(this.volume * 0.4, t + i * 0.08 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.08 + 0.35);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(t + i * 0.08);
-      osc.stop(t + i * 0.08 + 0.35);
-    });
-  }
-
-  // Bug found / alert sound (soft digital radar ping)
-  playBugAlert() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(320, t);
-    osc.frequency.linearRampToValueAtTime(240, t + 0.15);
-
-    gain.gain.setValueAtTime(this.volume * 0.3, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+    gain.gain.setValueAtTime(this.volume * 0.45, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start(t);
-    osc.stop(t + 0.18);
+    osc.stop(t + 0.16);
   }
 
-  // Coffee sip / energize bubble
-  playCoffee() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-
-    const t = this.ctx.currentTime;
-    for (let i = 0; i < 4; i++) {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      const delay = i * 0.06;
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(400 + Math.random() * 500, t + delay);
-      osc.frequency.exponentialRampToValueAtTime(900 + Math.random() * 300, t + delay + 0.05);
-
-      gain.gain.setValueAtTime(this.volume * 0.35, t + delay);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.05);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(t + delay);
-      osc.stop(t + delay + 0.05);
-    }
-  }
-
-  // Pomodoro bell chime
-  playBell() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-
-    const t = this.ctx.currentTime;
-    const osc1 = this.ctx.createOscillator();
-    const osc2 = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc1.type = 'sine';
-    osc1.frequency.setValueAtTime(880, t); // A5
-
-    osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(1760, t); // harmonic octave
-
-    gain.gain.setValueAtTime(this.volume * 0.5, t);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
-
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc1.start(t);
-    osc2.start(t);
-    osc1.stop(t + 1.2);
-    osc2.stop(t + 1.2);
-  }
-
-  // Soft keyboard typing tick
+  // Soft typing / step tick
   playKeyTick() {
     if (this.muted) return;
     this.init();
@@ -201,17 +212,19 @@ class SoundFX {
     const gain = this.ctx.createGain();
 
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1200 + Math.random() * 400, t);
+    osc.frequency.setValueAtTime(1100 + Math.random() * 300, t);
 
-    gain.gain.setValueAtTime(this.volume * 0.08, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    gain.gain.setValueAtTime(this.volume * 0.06, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start(t);
-    osc.stop(t + 0.03);
+    osc.stop(t + 0.025);
   }
+
+  stopPurr() {}
 }
 
 export const soundFX = new SoundFX();
