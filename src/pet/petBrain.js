@@ -8,13 +8,13 @@ export class PetBrain {
     this.catEl = catElement;
 
     this.breed = 'calico'; // Default: Anatomically accurate Calico Cat
-    this.state = 'idle'; // 'idle' | 'walking' | 'grooming' | 'swatting' | 'loaf'
+    this.state = 'walking'; // Start walking immediately!
 
     // Positioning and roaming
-    this.x = 100;
-    this.targetX = 100;
+    this.x = 30;
+    this.targetX = 220;
     this.facing = 1; // 1 = right, -1 = left
-    this.speed = 1.2;
+    this.speed = 1.35; // Natural feline digitigrade walking speed
 
     // Mouse Cursor Awareness
     this.mouse = { x: -999, y: -999, inStage: false };
@@ -24,7 +24,7 @@ export class PetBrain {
 
     // Timers
     this.stateTimer = 0;
-    this.nextDecisionTime = Date.now() + 3000;
+    this.nextDecisionTime = Date.now() + 1000;
 
     this.initMouseListeners();
     this.startLoop();
@@ -114,45 +114,44 @@ export class PetBrain {
       else if (dx < -20) this.facing = -1;
       this.render();
     } else {
-      // AUTONOMOUS LIFE: Roaming, Walking, Cleaning itself, Loafing
+      // AUTONOMOUS LIFE: Active Continuous Random Walking & Exploring
       if (this.state === 'walking') {
         const diff = this.targetX - this.x;
-        if (Math.abs(diff) > 2) {
+        if (Math.abs(diff) > 3) {
           this.facing = diff > 0 ? 1 : -1;
           this.x += Math.sign(diff) * this.speed;
         } else {
-          // Arrived at target! Sit and look around
+          // Reached the waypoint! Brief natural pause to sniff/look around (0.8s - 1.8s)
           this.state = 'idle';
-          this.nextDecisionTime = now + 3000 + Math.random() * 4000;
           this.render();
+
+          const roll = Math.random();
+          if (roll < 0.15) {
+            // 15% chance: Spontaneous quick paw cleaning while stopped
+            this.state = 'grooming';
+            this.render();
+            soundFX.playTrill();
+            soundFX.playPurr(2.5);
+            this.nextDecisionTime = now + 3500;
+          } else {
+            // Short natural feline pause before picking the next spot
+            this.nextDecisionTime = now + 800 + Math.random() * 1000;
+          }
         }
       } else if (now > this.nextDecisionTime && this.state !== 'swatting') {
-        // Autonomous decision: What does the cat feel like doing?
-        const roll = Math.random();
+        // Pick a new random target across the room with a good stride distance (at least 70px)
+        let newTargetX;
+        let attempts = 0;
+        do {
+          newTargetX = minX + Math.random() * (maxX - minX);
+          attempts++;
+        } while (Math.abs(newTargetX - this.x) < 70 && attempts < 10);
 
-        if (roll < 0.40) {
-          // 40%: Groom itself & lick paw/feet!
-          this.state = 'grooming';
-          this.render();
-          soundFX.playTrill();
-          soundFX.playPurr(3.5);
-          this.spawnParticle('✨');
-          this.nextDecisionTime = now + 5000 + Math.random() * 2000;
-        } else if (roll < 0.80) {
-          // 40%: Roam to a new spot in the room!
-          this.state = 'walking';
-          this.targetX = minX + Math.random() * (maxX - minX);
-          this.render();
-          soundFX.playKeyTick();
-          this.nextDecisionTime = now + 12000;
-        } else {
-          // 20%: Tuck into a cozy cat loaf!
-          this.state = 'loaf';
-          this.render();
-          soundFX.playPurr(5.0);
-          this.spawnParticle('💤');
-          this.nextDecisionTime = now + 6000 + Math.random() * 3000;
-        }
+        this.targetX = newTargetX;
+        this.facing = this.targetX > this.x ? 1 : -1;
+        this.state = 'walking';
+        this.render();
+        soundFX.playKeyTick();
       }
     }
 

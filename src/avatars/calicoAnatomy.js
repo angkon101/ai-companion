@@ -308,61 +308,121 @@ function renderCalicoGrooming(eyeOffset) {
 
 // ============================================================================
 // 3. ANATOMICALLY ACCURATE CALICO: WALKING PROWL
-// Features: Full lateral quadruped stride, digitigrade foot strike, swinging tail
+// Features: Digitigrade 4-beat stride, free-floating scapula elevation,
+// primordial pouch sway, S-curved counterbalance tail, alert sensory whiskers.
 // ============================================================================
 function renderCalicoWalking() {
   return `
-    <svg class="pet-cat-svg calico-walking" viewBox="0 0 240 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="120" cy="186" rx="85" ry="9" fill="#000000" opacity="0.3" class="cat-shadow" />
+    <svg class="pet-cat-svg calico-walking" viewBox="0 0 250 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ground Contact Shadow (moves with gait) -->
+      <ellipse cx="125" cy="186" rx="90" ry="10" fill="#000000" opacity="0.32" class="cat-walk-shadow" />
 
-      <!-- S-Curved High Tail in Air -->
-      <path d="M 52 118 C 22 96 14 55 38 38 C 48 30 52 42 44 60 C 32 78 44 100 62 120 Z" 
-            fill="#ea580c" stroke="#9a3412" stroke-width="1" class="cat-tail-walk" />
+      <!-- TAIL: S-Curved Dynamic Ballast & Gyroscopic Counterweight -->
+      <g class="calico-tail-walking">
+        <path d="M 52 118 C 18 92 8 48 34 32 C 45 25 50 38 42 58 C 28 78 42 102 62 120 Z" 
+              fill="#ea580c" stroke="#9a3412" stroke-width="1.2" class="cat-tail-walk" />
+        <!-- Tail black ring marking -->
+        <path d="M 38 34 C 44 26 48 35 44 45 C 38 46 34 40 38 34 Z" fill="#1e293b" />
+      </g>
 
+      <!-- FELINE WALKING SKELETAL RIG -->
       <g class="calico-walk-skeleton">
-        <!-- Rear Left Leg (Driving backward) -->
-        <g class="leg-step-l">
-          <path d="M 60 125 L 48 160 L 44 182" stroke="#1e293b" stroke-width="12" stroke-linecap="round" fill="none" />
-          <ellipse cx="43" cy="184" rx="7" ry="5" fill="#ffffff" />
+        
+        <!-- ================= REAR LIMBS (40% Weight, Propulsive Launchers) ================= -->
+        <!-- Rear Far Leg (Left Hind: Hock Joint & Metatarsals driving backward) -->
+        <g class="leg-hind-l">
+          <!-- Femur & Stifle (Knee) -->
+          <path d="M 64 120 L 52 142 L 42 165 L 38 182" stroke="#1e293b" stroke-width="12" stroke-linecap="round" fill="none" />
+          <!-- Hock Joint Knuckle -->
+          <circle cx="42" cy="165" r="5" fill="#1e293b" />
+          <!-- Digitigrade Paw & White Sock -->
+          <ellipse cx="37" cy="184" rx="7.5" ry="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
         </g>
 
-        <!-- Front Left Leg (Pushing back) -->
-        <g class="leg-step-r">
-          <path d="M 152 128 L 142 162 L 138 182" stroke="#ffffff" stroke-width="12" stroke-linecap="round" fill="none" />
-          <ellipse cx="137" cy="184" rx="7" ry="5" fill="#ffffff" />
+        <!-- ================= FRONT LIMBS (60% Weight, Directional Steerers) ================= -->
+        <!-- Front Far Leg (Left Fore: Scapula, Humerus, Carpus pushing back) -->
+        <g class="leg-fore-l">
+          <path d="M 154 122 L 146 148 L 140 168 L 136 182" stroke="#ffffff" stroke-width="13" stroke-linecap="round" fill="none" />
+          <!-- Carpal Joint -->
+          <circle cx="140" cy="168" r="4.5" fill="#e2e8f0" />
+          <!-- Digitigrade Forepaw with Pink Toe Beans -->
+          <ellipse cx="135" cy="184" rx="8" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
         </g>
 
-        <!-- Flexible Feline Spine & Flank Patches -->
-        <path d="M 58 115 C 75 105 140 105 165 115 C 170 135 158 150 130 146 C 95 146 64 142 55 125 Z" fill="#ffffff" />
-        <path d="M 70 110 C 85 106 100 115 95 136 C 80 138 68 128 70 110 Z" fill="#1e293b" />
-        <path d="M 125 108 C 142 108 152 120 148 140 C 132 142 120 128 125 108 Z" fill="#ea580c" />
-
-        <!-- Rear Right Leg (Stepping forward) -->
-        <g class="leg-step-r">
-          <path d="M 68 128 L 78 158 L 86 182" stroke="#ea580c" stroke-width="13" stroke-linecap="round" fill="none" />
-          <ellipse cx="87" cy="184" rx="8" ry="5" fill="#ffffff" />
-        </g>
-
-        <!-- Front Right Leg (Reaching forward) -->
-        <g class="leg-step-l">
-          <path d="M 160 128 L 172 158 L 182 182" stroke="#ffffff" stroke-width="13" stroke-linecap="round" fill="none" />
-          <ellipse cx="184" cy="184" rx="8" ry="5" fill="#ffffff" />
-        </g>
-
-        <!-- Head Prowling Ahead -->
-        <g class="calico-prowl-head">
-          <polygon points="168,80 172,48 188,70" fill="#1e293b" />
-          <polygon points="198,80 208,48 214,70" fill="#ea580c" />
-          <ellipse cx="192" cy="90" rx="30" ry="24" fill="#ffffff" />
-          <!-- Eye looking forward -->
-          <ellipse cx="196" cy="85" rx="6" ry="7" fill="url(#calicoEyeGrad)" />
-          <ellipse cx="196" cy="85" rx="1.8" ry="5.5" fill="#022c22" />
-          <circle cx="194.5" cy="83" r="1.5" fill="#ffffff" />
+        <!-- ================= TORSO & PRIMORDIAL POUCH ================= -->
+        <!-- Flexible Spine & Muscular Ribcage -->
+        <g class="cat-torso-walk">
+          <!-- Main White Torso Base -->
+          <path d="M 56 114 C 74 102 144 102 170 114 C 176 136 162 152 134 148 C 98 148 64 144 54 125 Z" fill="#ffffff" />
           
-          <ellipse cx="210" cy="94" rx="8" ry="6" fill="#ffffff" />
-          <polygon points="214,92 218,92 216,95" fill="#fb7185" />
-          <line x1="214" y1="93" x2="236" y2="90" stroke="#ffffff" stroke-width="1.1" />
-          <line x1="214" y1="95" x2="238" y2="96" stroke="#ffffff" stroke-width="1.1" />
+          <!-- Primordial Pouch: Loose lower belly fold that sways with stride -->
+          <path d="M 76 142 C 95 154 122 153 140 144 C 125 156 90 158 76 142 Z" fill="#f1f5f9" class="cat-primordial-pouch" />
+
+          <!-- Calico Flank Patches -->
+          <!-- Inky Black Saddle Patch over spine and left flank -->
+          <path d="M 72 108 C 88 104 104 114 98 136 C 82 138 68 128 72 108 Z" fill="#1e293b" />
+          <!-- Warm Ginger Orange Patch over right ribs -->
+          <path d="M 126 106 C 145 106 156 118 152 140 C 135 142 122 128 126 106 Z" fill="#ea580c" />
+        </g>
+
+        <!-- ================= NEAR LIMBS (Foreground) ================= -->
+        <!-- Rear Near Leg (Right Hind: Muscular Thigh, Elevated Hock & Metatarsus stepping forward) -->
+        <g class="leg-hind-r">
+          <!-- Muscular Thigh & Stifle -->
+          <path d="M 72 118 C 82 132 80 152 86 168 L 94 182" stroke="#ea580c" stroke-width="14" stroke-linecap="round" fill="none" />
+          <!-- Elevated Hock Joint -->
+          <circle cx="86" cy="168" r="6" fill="#ea580c" />
+          <!-- White Sock Paw with Knuckle Creases -->
+          <ellipse cx="95" cy="184" rx="8.5" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+          <line x1="93" y1="182" x2="93" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+          <line x1="97" y1="182" x2="97" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+        </g>
+
+        <!-- Front Near Leg (Right Fore: Free-floating Scapula, Humerus & Carpal Extension) -->
+        <g class="leg-fore-r">
+          <!-- Scapular Muscle Ridge & Humerus -->
+          <path d="M 166 118 L 178 148 L 186 168 L 194 182" stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none" />
+          <!-- Carpal (Wrist) Joint -->
+          <circle cx="186" cy="168" r="5" fill="#e2e8f0" />
+          <!-- White Forepaw touching down -->
+          <ellipse cx="196" cy="184" rx="8.5" ry="5.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+          <line x1="194" y1="182" x2="194" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+          <line x1="198" y1="182" x2="198" y2="186" stroke="#94a3b8" stroke-width="0.8" />
+        </g>
+
+        <!-- ================= CRANIAL HEAD (Stabilized & Alert) ================= -->
+        <g class="calico-prowl-head">
+          <!-- Ears with Henry's Pocket Baffles -->
+          <polygon points="174,78 178,44 194,68" fill="#1e293b" stroke="#0f172a" stroke-width="0.8" />
+          <polygon points="176,72 180,52 190,66" fill="#fbcfe8" />
+          <polygon points="204,78 214,44 220,68" fill="#ea580c" stroke="#9a3412" stroke-width="0.8" />
+          <polygon points="206,72 212,52 218,66" fill="#fbcfe8" />
+
+          <!-- Skull & Malar Cheeks -->
+          <ellipse cx="198" cy="88" rx="32" ry="25" fill="#ffffff" />
+          <!-- Calico Face Patches -->
+          <path d="M 172 74 C 168 88 180 102 195 96 Z" fill="#1e293b" />
+          <path d="M 218 74 C 222 88 210 102 198 96 Z" fill="#ea580c" />
+
+          <!-- Steady Feline Eye Tracking Forward -->
+          <g class="cat-walk-eye">
+            <ellipse cx="202" cy="84" rx="6.5" ry="7.5" fill="url(#calicoEyeGrad)" />
+            <!-- Vertical Slit Pupil -->
+            <ellipse cx="202" cy="84" rx="2" ry="6" fill="#022c22" />
+            <!-- Specular Highlight -->
+            <circle cx="200.5" cy="81.5" r="1.6" fill="#ffffff" />
+          </g>
+          
+          <!-- Puffy Muzzle & Pink Leather Nose -->
+          <ellipse cx="216" cy="92" rx="9" ry="6.5" fill="#ffffff" />
+          <polygon points="220,89 224,89 222,93" fill="#fb7185" stroke="#f43f5e" stroke-width="0.6" />
+          
+          <!-- Forward-Braced Whiskers Sensing Air Currents -->
+          <g stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" opacity="0.95">
+            <path d="M 222 91 C 235 88 244 87 252 86" />
+            <path d="M 222 93 C 236 94 246 95 254 98" />
+            <path d="M 222 95 C 235 98 244 104 250 110" />
+          </g>
         </g>
       </g>
     </svg>
